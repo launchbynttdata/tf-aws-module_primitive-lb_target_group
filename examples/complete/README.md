@@ -99,8 +99,8 @@ module "lb_target_group" {
 
 | Name | Source | Version |
 |------|--------|---------|
-| <a name="module_resource_names"></a> [resource\_names](#module\_resource\_names) | terraform.registry.launch.nttdata.com/module_library/resource_name/launch | ~> 2.0 |
 | <a name="module_lb_target_group"></a> [lb\_target\_group](#module\_lb\_target\_group) | ../.. | n/a |
+| <a name="module_resource_names"></a> [resource\_names](#module\_resource\_names) | terraform.registry.launch.nttdata.com/module_library/resource_name/launch | ~> 2.0 |
 
 ## Resources
 
@@ -114,46 +114,46 @@ module "lb_target_group" {
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
-| <a name="input_logical_product_family"></a> [logical\_product\_family](#input\_logical\_product\_family) | Product family for the resource\_name module. | `string` | `"launch"` | no |
-| <a name="input_logical_product_service"></a> [logical\_product\_service](#input\_logical\_product\_service) | Product service for the resource\_name module. | `string` | `"lbtg"` | no |
 | <a name="input_class_env"></a> [class\_env](#input\_class\_env) | Environment class for the resource\_name module. | `string` | `"dev"` | no |
+| <a name="input_connection_termination"></a> [connection\_termination](#input\_connection\_termination) | Whether to terminate connections at deregistration on NLBs. | `bool` | `false` | no |
+| <a name="input_deregistration_delay"></a> [deregistration\_delay](#input\_deregistration\_delay) | Seconds to wait before changing a deregistering target from draining to unused. | `number` | `60` | no |
+| <a name="input_health_check"></a> [health\_check](#input\_health\_check) | Health check configuration block for the target group. | <pre>object({<br/>    enabled             = optional(bool)<br/>    healthy_threshold   = optional(number)<br/>    unhealthy_threshold = optional(number)<br/>    interval            = optional(number)<br/>    timeout             = optional(number)<br/>    protocol            = optional(string)<br/>    port                = optional(string)<br/>    path                = optional(string)<br/>    matcher             = optional(string)<br/>  })</pre> | <pre>{<br/>  "enabled": true,<br/>  "healthy_threshold": 3,<br/>  "interval": 30,<br/>  "matcher": "200-299",<br/>  "path": "/",<br/>  "port": "traffic-port",<br/>  "protocol": "HTTPS",<br/>  "timeout": 10,<br/>  "unhealthy_threshold": 3<br/>}</pre> | no |
 | <a name="input_instance_env"></a> [instance\_env](#input\_instance\_env) | Instance environment number for the resource\_name module. | `number` | `0` | no |
 | <a name="input_instance_resource"></a> [instance\_resource](#input\_instance\_resource) | Instance resource number for the resource\_name module. | `number` | `0` | no |
-| <a name="input_resource_names_map"></a> [resource\_names\_map](#input\_resource\_names\_map) | Map of resource type entries used to derive standardized names. | <pre>map(object({<br/>    name       = string<br/>    max_length = optional(number, 60)<br/>  }))</pre> | <pre>{<br/>  "target_group": {<br/>    "max_length": 32,<br/>    "name": "tg1"<br/>  },<br/>  "vpc": {<br/>    "max_length": 60,<br/>    "name": "vpc1"<br/>  }<br/>}</pre> | no |
-| <a name="input_vpc_cidr"></a> [vpc\_cidr](#input\_vpc\_cidr) | CIDR block for the VPC created in this example. | `string` | `"10.0.0.0/16"` | no |
-| <a name="input_port"></a> [port](#input\_port) | Port on which targets receive traffic. | `number` | `443` | no |
-| <a name="input_protocol"></a> [protocol](#input\_protocol) | Protocol for routing traffic to targets. | `string` | `"HTTPS"` | no |
-| <a name="input_protocol_version"></a> [protocol\_version](#input\_protocol\_version) | Protocol version. HTTP1, HTTP2, or GRPC. | `string` | `"HTTP1"` | no |
-| <a name="input_target_type"></a> [target\_type](#input\_target\_type) | Type of target. | `string` | `"ip"` | no |
 | <a name="input_ip_address_type"></a> [ip\_address\_type](#input\_ip\_address\_type) | IP address type for ip target type. | `string` | `"ipv4"` | no |
-| <a name="input_deregistration_delay"></a> [deregistration\_delay](#input\_deregistration\_delay) | Seconds to wait before changing a deregistering target from draining to unused. | `number` | `60` | no |
-| <a name="input_connection_termination"></a> [connection\_termination](#input\_connection\_termination) | Whether to terminate connections at deregistration on NLBs. | `bool` | `false` | no |
-| <a name="input_slow_start"></a> [slow\_start](#input\_slow\_start) | Slow start duration in seconds. | `number` | `0` | no |
+| <a name="input_lambda_multi_value_headers_enabled"></a> [lambda\_multi\_value\_headers\_enabled](#input\_lambda\_multi\_value\_headers\_enabled) | Multi-value headers for Lambda targets. | `bool` | `false` | no |
 | <a name="input_load_balancing_algorithm_type"></a> [load\_balancing\_algorithm\_type](#input\_load\_balancing\_algorithm\_type) | ALB load balancing algorithm. | `string` | `"round_robin"` | no |
 | <a name="input_load_balancing_anomaly_mitigation"></a> [load\_balancing\_anomaly\_mitigation](#input\_load\_balancing\_anomaly\_mitigation) | Target anomaly mitigation. | `string` | `"off"` | no |
 | <a name="input_load_balancing_cross_zone_enabled"></a> [load\_balancing\_cross\_zone\_enabled](#input\_load\_balancing\_cross\_zone\_enabled) | Cross-zone load balancing setting. | `string` | `"use_load_balancer_configuration"` | no |
-| <a name="input_lambda_multi_value_headers_enabled"></a> [lambda\_multi\_value\_headers\_enabled](#input\_lambda\_multi\_value\_headers\_enabled) | Multi-value headers for Lambda targets. | `bool` | `false` | no |
-| <a name="input_preserve_client_ip"></a> [preserve\_client\_ip](#input\_preserve\_client\_ip) | Whether client IP preservation is enabled. | `string` | `null` | no |
-| <a name="input_proxy_protocol_v2"></a> [proxy\_protocol\_v2](#input\_proxy\_protocol\_v2) | Whether to enable proxy protocol v2 on NLBs. | `bool` | `false` | no |
+| <a name="input_logical_product_family"></a> [logical\_product\_family](#input\_logical\_product\_family) | Product family for the resource\_name module. | `string` | `"launch"` | no |
+| <a name="input_logical_product_service"></a> [logical\_product\_service](#input\_logical\_product\_service) | Product service for the resource\_name module. | `string` | `"lbtg"` | no |
 | <a name="input_name"></a> [name](#input\_name) | Override the generated target group name. Conflicts with name\_prefix. | `string` | `null` | no |
 | <a name="input_name_prefix"></a> [name\_prefix](#input\_name\_prefix) | Override the generated target group name prefix. Conflicts with name. | `string` | `null` | no |
-| <a name="input_health_check"></a> [health\_check](#input\_health\_check) | Health check configuration block for the target group. | <pre>object({<br/>    enabled             = optional(bool)<br/>    healthy_threshold   = optional(number)<br/>    unhealthy_threshold = optional(number)<br/>    interval            = optional(number)<br/>    timeout             = optional(number)<br/>    protocol            = optional(string)<br/>    port                = optional(string)<br/>    path                = optional(string)<br/>    matcher             = optional(string)<br/>  })</pre> | <pre>{<br/>  "enabled": true,<br/>  "healthy_threshold": 3,<br/>  "interval": 30,<br/>  "matcher": "200-299",<br/>  "path": "/",<br/>  "port": "traffic-port",<br/>  "protocol": "HTTPS",<br/>  "timeout": 10,<br/>  "unhealthy_threshold": 3<br/>}</pre> | no |
+| <a name="input_port"></a> [port](#input\_port) | Port on which targets receive traffic. | `number` | `443` | no |
+| <a name="input_preserve_client_ip"></a> [preserve\_client\_ip](#input\_preserve\_client\_ip) | Whether client IP preservation is enabled. | `string` | `null` | no |
+| <a name="input_protocol"></a> [protocol](#input\_protocol) | Protocol for routing traffic to targets. | `string` | `"HTTPS"` | no |
+| <a name="input_protocol_version"></a> [protocol\_version](#input\_protocol\_version) | Protocol version. HTTP1, HTTP2, or GRPC. | `string` | `"HTTP1"` | no |
+| <a name="input_proxy_protocol_v2"></a> [proxy\_protocol\_v2](#input\_proxy\_protocol\_v2) | Whether to enable proxy protocol v2 on NLBs. | `bool` | `false` | no |
+| <a name="input_resource_names_map"></a> [resource\_names\_map](#input\_resource\_names\_map) | Map of resource type entries used to derive standardized names. | <pre>map(object({<br/>    name       = string<br/>    max_length = optional(number, 60)<br/>  }))</pre> | <pre>{<br/>  "target_group": {<br/>    "max_length": 32,<br/>    "name": "tg1"<br/>  },<br/>  "vpc": {<br/>    "max_length": 60,<br/>    "name": "vpc1"<br/>  }<br/>}</pre> | no |
+| <a name="input_slow_start"></a> [slow\_start](#input\_slow\_start) | Slow start duration in seconds. | `number` | `0` | no |
 | <a name="input_stickiness"></a> [stickiness](#input\_stickiness) | Stickiness configuration block for the target group. | <pre>object({<br/>    type            = string<br/>    enabled         = optional(bool)<br/>    cookie_duration = optional(number)<br/>    cookie_name     = optional(string)<br/>  })</pre> | <pre>{<br/>  "cookie_duration": 3600,<br/>  "enabled": true,<br/>  "type": "lb_cookie"<br/>}</pre> | no |
-| <a name="input_target_failover"></a> [target\_failover](#input\_target\_failover) | Target failover block. GWLB only. | <pre>object({<br/>    on_deregistration = string<br/>    on_unhealthy      = string<br/>  })</pre> | `null` | no |
-| <a name="input_target_health_state"></a> [target\_health\_state](#input\_target\_health\_state) | Target health state block. NLB only. | <pre>object({<br/>    enable_unhealthy_connection_termination = optional(bool)<br/>    unhealthy_draining_interval             = optional(number)<br/>  })</pre> | `null` | no |
-| <a name="input_target_group_health"></a> [target\_group\_health](#input\_target\_group\_health) | Target group health requirements block. | <pre>object({<br/>    dns_failover = optional(object({<br/>      minimum_healthy_targets_count      = optional(string)<br/>      minimum_healthy_targets_percentage = optional(string)<br/>    }))<br/>    unhealthy_state_routing = optional(object({<br/>      minimum_healthy_targets_count      = optional(string)<br/>      minimum_healthy_targets_percentage = optional(string)<br/>    }))<br/>  })</pre> | <pre>{<br/>  "dns_failover": {<br/>    "minimum_healthy_targets_count": "1",<br/>    "minimum_healthy_targets_percentage": "off"<br/>  },<br/>  "unhealthy_state_routing": {<br/>    "minimum_healthy_targets_count": "1",<br/>    "minimum_healthy_targets_percentage": "off"<br/>  }<br/>}</pre> | no |
 | <a name="input_tags"></a> [tags](#input\_tags) | Tags applied to all resources created in the example. | `map(string)` | <pre>{<br/>  "Environment": "dev",<br/>  "ManagedBy": "terraform"<br/>}</pre> | no |
+| <a name="input_target_failover"></a> [target\_failover](#input\_target\_failover) | Target failover block. GWLB only. | <pre>object({<br/>    on_deregistration = string<br/>    on_unhealthy      = string<br/>  })</pre> | `null` | no |
+| <a name="input_target_group_health"></a> [target\_group\_health](#input\_target\_group\_health) | Target group health requirements block. | <pre>object({<br/>    dns_failover = optional(object({<br/>      minimum_healthy_targets_count      = optional(string)<br/>      minimum_healthy_targets_percentage = optional(string)<br/>    }))<br/>    unhealthy_state_routing = optional(object({<br/>      minimum_healthy_targets_count      = optional(string)<br/>      minimum_healthy_targets_percentage = optional(string)<br/>    }))<br/>  })</pre> | <pre>{<br/>  "dns_failover": {<br/>    "minimum_healthy_targets_count": "1",<br/>    "minimum_healthy_targets_percentage": "off"<br/>  },<br/>  "unhealthy_state_routing": {<br/>    "minimum_healthy_targets_count": "1",<br/>    "minimum_healthy_targets_percentage": "off"<br/>  }<br/>}</pre> | no |
+| <a name="input_target_health_state"></a> [target\_health\_state](#input\_target\_health\_state) | Target health state block. NLB only. | <pre>object({<br/>    enable_unhealthy_connection_termination = optional(bool)<br/>    unhealthy_draining_interval             = optional(number)<br/>  })</pre> | `null` | no |
+| <a name="input_target_type"></a> [target\_type](#input\_target\_type) | Type of target. | `string` | `"ip"` | no |
 | <a name="input_use_azure_region_abbr"></a> [use\_azure\_region\_abbr](#input\_use\_azure\_region\_abbr) | Unused on AWS, present for compatibility with the resource\_name module API. | `bool` | `false` | no |
+| <a name="input_vpc_cidr"></a> [vpc\_cidr](#input\_vpc\_cidr) | CIDR block for the VPC created in this example. | `string` | `"10.0.0.0/16"` | no |
 
 ## Outputs
 
 | Name | Description |
 |------|-------------|
-| <a name="output_id"></a> [id](#output\_id) | The ID of the target group (same as the arn). |
 | <a name="output_arn"></a> [arn](#output\_arn) | The ARN of the target group. |
 | <a name="output_arn_suffix"></a> [arn\_suffix](#output\_arn\_suffix) | The ARN suffix of the target group. |
-| <a name="output_name"></a> [name](#output\_name) | The name of the target group. |
+| <a name="output_id"></a> [id](#output\_id) | The ID of the target group (same as the arn). |
 | <a name="output_load_balancer_arns"></a> [load\_balancer\_arns](#output\_load\_balancer\_arns) | ARNs of the load balancers associated with the target group. |
+| <a name="output_name"></a> [name](#output\_name) | The name of the target group. |
 | <a name="output_tags_all"></a> [tags\_all](#output\_tags\_all) | Map of all tags assigned to the target group. |
 | <a name="output_vpc_id"></a> [vpc\_id](#output\_vpc\_id) | ID of the VPC created for the target group. |
 <!-- END_TF_DOCS -->

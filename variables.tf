@@ -19,6 +19,11 @@ variable "name" {
     condition     = var.name == null ? true : (length(var.name) <= 32 && can(regex("^[a-zA-Z0-9]([a-zA-Z0-9-]*[a-zA-Z0-9])?$", var.name)))
     error_message = "name must be at most 32 characters, alphanumeric or hyphens only, and must not begin or end with a hyphen."
   }
+
+  validation {
+    condition     = !(var.name != null && var.name_prefix != null)
+    error_message = "name and name_prefix are mutually exclusive; set at most one of them."
+  }
 }
 
 variable "name_prefix" {
@@ -41,6 +46,11 @@ variable "port" {
     condition     = var.port == null ? true : (var.port >= 1 && var.port <= 65535)
     error_message = "port must be between 1 and 65535."
   }
+
+  validation {
+    condition     = !contains(["instance", "ip", "alb"], var.target_type) || var.port != null
+    error_message = "port is required when target_type is instance, ip, or alb."
+  }
 }
 
 variable "protocol" {
@@ -51,6 +61,11 @@ variable "protocol" {
   validation {
     condition     = var.protocol == null ? true : contains(["GENEVE", "HTTP", "HTTPS", "TCP", "TCP_UDP", "TLS", "UDP", "QUIC", "TCP_QUIC"], var.protocol)
     error_message = "protocol must be one of GENEVE, HTTP, HTTPS, TCP, TCP_UDP, TLS, UDP, QUIC, or TCP_QUIC."
+  }
+
+  validation {
+    condition     = !contains(["instance", "ip", "alb"], var.target_type) || var.protocol != null
+    error_message = "protocol is required when target_type is instance, ip, or alb."
   }
 }
 
@@ -69,6 +84,11 @@ variable "vpc_id" {
   description = "Identifier of the VPC in which to create the target group. Required when target_type is instance, ip, or alb."
   type        = string
   default     = null
+
+  validation {
+    condition     = !contains(["instance", "ip", "alb"], var.target_type) || var.vpc_id != null
+    error_message = "vpc_id is required when target_type is instance, ip, or alb."
+  }
 }
 
 variable "target_type" {
@@ -316,6 +336,49 @@ variable "target_group_health" {
     }))
   })
   default = null
+
+  validation {
+    condition = (
+      var.target_group_health == null ? true :
+      try(var.target_group_health.dns_failover, null) == null ? true :
+      try(var.target_group_health.dns_failover.minimum_healthy_targets_count, null) == null ? true :
+      var.target_group_health.dns_failover.minimum_healthy_targets_count == "off" ? true :
+      try(tonumber(var.target_group_health.dns_failover.minimum_healthy_targets_count), -1) >= 1
+    )
+    error_message = "target_group_health.dns_failover.minimum_healthy_targets_count must be \"off\" or a positive integer."
+  }
+
+  validation {
+    condition = (
+      var.target_group_health == null ? true :
+      try(var.target_group_health.dns_failover, null) == null ? true :
+      try(var.target_group_health.dns_failover.minimum_healthy_targets_percentage, null) == null ? true :
+      var.target_group_health.dns_failover.minimum_healthy_targets_percentage == "off" ? true :
+      try(tonumber(var.target_group_health.dns_failover.minimum_healthy_targets_percentage), -1) >= 1 && try(tonumber(var.target_group_health.dns_failover.minimum_healthy_targets_percentage), 101) <= 100
+    )
+    error_message = "target_group_health.dns_failover.minimum_healthy_targets_percentage must be \"off\" or an integer between 1 and 100."
+  }
+
+  validation {
+    condition = (
+      var.target_group_health == null ? true :
+      try(var.target_group_health.unhealthy_state_routing, null) == null ? true :
+      try(var.target_group_health.unhealthy_state_routing.minimum_healthy_targets_count, null) == null ? true :
+      try(tonumber(var.target_group_health.unhealthy_state_routing.minimum_healthy_targets_count), -1) >= 1
+    )
+    error_message = "target_group_health.unhealthy_state_routing.minimum_healthy_targets_count must be a positive integer (\"off\" is not supported here)."
+  }
+
+  validation {
+    condition = (
+      var.target_group_health == null ? true :
+      try(var.target_group_health.unhealthy_state_routing, null) == null ? true :
+      try(var.target_group_health.unhealthy_state_routing.minimum_healthy_targets_percentage, null) == null ? true :
+      var.target_group_health.unhealthy_state_routing.minimum_healthy_targets_percentage == "off" ? true :
+      try(tonumber(var.target_group_health.unhealthy_state_routing.minimum_healthy_targets_percentage), -1) >= 1 && try(tonumber(var.target_group_health.unhealthy_state_routing.minimum_healthy_targets_percentage), 101) <= 100
+    )
+    error_message = "target_group_health.unhealthy_state_routing.minimum_healthy_targets_percentage must be \"off\" or an integer between 1 and 100."
+  }
 }
 
 variable "tags" {
