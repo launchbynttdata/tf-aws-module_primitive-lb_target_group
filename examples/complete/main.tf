@@ -39,6 +39,16 @@ resource "aws_vpc" "vpc" {
   })
 }
 
+# Lock down the VPC's default security group: no ingress, no egress.
+# Required by FG_R00089 (Fugue/Regula).
+resource "aws_default_security_group" "default" {
+  vpc_id = aws_vpc.vpc.id
+
+  tags = merge(var.tags, {
+    Name = "${module.resource_names["vpc"].standard}-default-restricted"
+  })
+}
+
 module "lb_target_group" {
   source = "../.."
 

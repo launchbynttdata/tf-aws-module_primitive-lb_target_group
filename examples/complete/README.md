@@ -35,6 +35,16 @@ resource "aws_vpc" "vpc" {
   })
 }
 
+# Lock down the VPC's default security group: no ingress, no egress.
+# Required by FG_R00089 (Fugue/Regula).
+resource "aws_default_security_group" "default" {
+  vpc_id = aws_vpc.vpc.id
+
+  tags = merge(var.tags, {
+    Name = "${module.resource_names["vpc"].standard}-default-restricted"
+  })
+}
+
 module "lb_target_group" {
   source = "../.."
 
@@ -96,6 +106,7 @@ module "lb_target_group" {
 
 | Name | Type |
 |------|------|
+| [aws_default_security_group.default](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/default_security_group) | resource |
 | [aws_vpc.vpc](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/vpc) | resource |
 | [aws_region.current](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/region) | data source |
 
