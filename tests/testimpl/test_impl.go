@@ -70,21 +70,21 @@ func attributeValue(attrs []types.TargetGroupAttribute, key string) (string, boo
 func assertCommonTargetGroupState(t *testing.T, ctx terratesttypes.TestContext) {
 	tfOpts := ctx.TerratestTerraformOptions()
 
-	id := terraform.Output(t, tfOpts, "id")
+	id := terraform.OutputContext(t, context.Background(), tfOpts, "id")
 	assert.NotEmpty(t, id, "id should be set")
 	assert.True(t, strings.HasPrefix(id, "arn:aws:elasticloadbalancing:"), "id should be an ELBv2 ARN")
 
-	arn := terraform.Output(t, tfOpts, "arn")
+	arn := terraform.OutputContext(t, context.Background(), tfOpts, "arn")
 	assert.Equal(t, id, arn, "id and arn should be identical for aws_lb_target_group")
 
-	arnSuffix := terraform.Output(t, tfOpts, "arn_suffix")
+	arnSuffix := terraform.OutputContext(t, context.Background(), tfOpts, "arn_suffix")
 	assert.True(t, strings.HasPrefix(arnSuffix, "targetgroup/"), "arn_suffix should start with targetgroup/")
 
-	tgName := terraform.Output(t, tfOpts, "name")
+	tgName := terraform.OutputContext(t, context.Background(), tfOpts, "name")
 	assert.NotEmpty(t, tgName, "name should be set")
 	assert.LessOrEqual(t, len(tgName), 32, "target group name must not exceed 32 characters")
 
-	vpcID := terraform.Output(t, tfOpts, "vpc_id")
+	vpcID := terraform.OutputContext(t, context.Background(), tfOpts, "vpc_id")
 	assert.NotEmpty(t, vpcID, "vpc_id should be set")
 
 	client := newELBv2Client(t)
@@ -154,7 +154,7 @@ func TestComposableComplete(t *testing.T, ctx terratesttypes.TestContext) {
 
 	t.Run("ModifyTargetGroupAttributesIsAccepted", func(t *testing.T) {
 		tfOpts := ctx.TerratestTerraformOptions()
-		arn := terraform.Output(t, tfOpts, "arn")
+		arn := terraform.OutputContext(t, context.Background(), tfOpts, "arn")
 		require.NotEmpty(t, arn, "arn output is required for the functional write test")
 
 		client := newELBv2Client(t)
@@ -205,7 +205,7 @@ func TestComposableCompleteReadonly(t *testing.T, ctx terratesttypes.TestContext
 
 	t.Run("DescribeTargetHealthIsAvailable", func(t *testing.T) {
 		tfOpts := ctx.TerratestTerraformOptions()
-		arn := terraform.Output(t, tfOpts, "arn")
+		arn := terraform.OutputContext(t, context.Background(), tfOpts, "arn")
 		require.NotEmpty(t, arn, "arn output is required for the readonly health check")
 
 		client := newELBv2Client(t)
